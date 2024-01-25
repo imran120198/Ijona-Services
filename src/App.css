@@ -1,5 +1,9 @@
 .App {
   text-align: center;
+  background-image: url(./Assets//leftSide.png);
+  background-position: left;
+  background-repeat: no-repeat;
+  background-size: contain;
 }
 
 .App-logo {
