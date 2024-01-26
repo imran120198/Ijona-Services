@@ -1,10 +1,12 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
+import { PacmanLoader } from "react-spinners";
 
 export const AppContext = createContext();
 
 const AppContextProvider = ({ children }) => {
   const [data, setData] = useState();
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
@@ -18,12 +20,17 @@ const AppContextProvider = ({ children }) => {
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(
         "https://json-server-zzk4.onrender.com/userData"
       );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 3000);
     }
   };
 
@@ -33,6 +40,7 @@ const AppContextProvider = ({ children }) => {
 
   const handleAddUser = async (newUser) => {
     try {
+      setLoading(true); // Set loading to true before adding user
       const response = await axios.post(
         "https://json-server-zzk4.onrender.com/userData",
         newUser
@@ -46,6 +54,8 @@ const AppContextProvider = ({ children }) => {
       }
     } catch (error) {
       console.error("Error adding user:", error);
+    } finally {
+      setLoading(false); // Set loading to false after adding user
     }
   };
 
@@ -80,9 +90,28 @@ const AppContextProvider = ({ children }) => {
     currentPage,
     itemsPerPage,
     handlePageChange,
+    loading,
   };
 
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
+  return (
+    <AppContext.Provider value={value}>
+      {loading ? (
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            zIndex: "9999",
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <PacmanLoader color={"#d63636"} loading={loading} size={35} />
+        </div>
+      ) : (
+        children
+      )}
+    </AppContext.Provider>
+  );
 };
 
 export default AppContextProvider;

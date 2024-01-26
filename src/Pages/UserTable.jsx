@@ -30,7 +30,7 @@ const UserTable = () => {
   const [newUserName, setNewUserName] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
 
-  const { data, handleEdit, handleDelete, handleAddUser } =
+  const { data, handleEdit, handleDelete, handleAddUser, loading } =
     useContext(AppContext);
   const {
     isOpen: editModalIsOpen,
@@ -71,6 +71,7 @@ const UserTable = () => {
   return (
     <div>
       <Navbar />
+      {loading && <div>Loading...</div>}
       <Box
         backgroundColor={"white"}
         boxShadow={"rgba(0, 0, 0, 0.24) 0px 3px 8px;"}
@@ -102,7 +103,8 @@ const UserTable = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {data &&
+              {!loading &&
+                data &&
                 data?.map((elem) => {
                   return (
                     <Tr key={elem.id}>

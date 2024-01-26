@@ -15,20 +15,19 @@ const Login = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
-  const [form, setForm] = useState([]);
+  const [form, setForm] = useState({ username: "", password: "" });
 
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    setForm((values) => ({ ...values, [name]: value }));
+    setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-
   const handleSubmit = () => {
-    if (!form.username || !form.password) {
-      alert("Please enter both username and password");
+    if (form.username !== "Ijona" || form.password !== "Ijona") {
+      alert("Incorrect username or password");
       return;
     }
 
@@ -38,6 +37,7 @@ const Login = () => {
     localStorage.setItem("userData", JSON.stringify(data));
     navigate("/home");
   };
+
   return (
     <Box h={"700px"}>
       <Box mt={"50px"} mb={"30px"}>
