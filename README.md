@@ -14,6 +14,10 @@ context api to store and retrieve data. Include pagination.
 ## Deployment Link
 https://sage-seahorse-afe1ed.netlify.app/ 
 
+## Login setup
+
+For login use `username = Ijona` and `password = Ijona`
+
 ## Tech Stack
 
 * React
