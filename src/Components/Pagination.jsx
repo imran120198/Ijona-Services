@@ -1,32 +1,44 @@
 import React, { useContext } from "react";
-import { Button } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { AppContext } from "../Context/AppContext";
 
 const Pagination = () => {
-  const { userData, currentPage, itemsPerPage, handlePageChange } =
-    useContext(AppContext);
+  const { datalength, page, limit, setPage } = useContext(AppContext);
 
-  const pageNumbers = Math.ceil(userData.length / itemsPerPage);
+  const totalPages = Math.ceil(datalength / limit);
+  const startItem = (page - 1) * limit + 1;
+  const endItem = Math.min(startItem + limit - 1, datalength);
 
-  const renderPaginationButtons = () => {
-    const buttons = [];
-
-    for (let i = 1; i <= pageNumbers; i++) {
-      buttons.push(
-        <Button
-          key={i}
-          onClick={() => handlePageChange(i)}
-          colorScheme={currentPage === i ? "blue" : "gray"}
-        >
-          {i}
-        </Button>
-      );
-    }
-
-    return buttons;
+  const handlePageAdd = () => {
+    setPage((page) => page + 1);
+  };
+  const handlePageSub = () => {
+    setPage((page) => page - 1);
   };
 
-  return <div>{renderPaginationButtons()}</div>;
+  return (
+    <Flex justify={"right"}>
+      <Flex justify={""} align={"center"}>
+      </Flex>
+      <Box>
+        <Button
+          onClick={handlePageSub}
+          bg={"transparent"}
+          isDisabled={page === 1}
+        >
+          {"<"}
+        </Button>
+        <Button>{page}</Button>
+        <Button
+          onClick={handlePageAdd}
+          isDisabled={page >= totalPages}
+          bg={"transparent"}
+        >
+          {">"}
+        </Button>
+      </Box>
+    </Flex>
+  );
 };
 
 export default Pagination;

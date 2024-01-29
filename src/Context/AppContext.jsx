@@ -7,16 +7,43 @@ export const AppContext = createContext();
 const AppContextProvider = ({ children }) => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const [limit, setLimit] = useState(5);
+  const [page, setPage] = useState(1);
+  const [datalength, setDataLength] = useState(null);
+
+  const url = new URL(
+    "https://json-server-zzk4.onrender.com/userData"
+  );
+  url.searchParams.append("page", page);
+  url.searchParams.append("limit", limit);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  const handlePageChange = (pageNumber) => {
-    setCurrentPage(pageNumber);
-  };
+  const initialData = async () => {
+    setLoading(true);
+    await fetch(url, {
+    method: "GET",
+    headers: { "content-type": "application/json" },
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      // handle error
+    })
+    .then((users) => {
+      setLoading(false)
+      setData(users);
+    })
+    .catch((error) => {
+      // handle error
+      console.log(error);
+      setLoading(false)
+    });
+};
+
 
   const fetchData = async () => {
     try {
@@ -25,6 +52,8 @@ const AppContextProvider = ({ children }) => {
         "https://json-server-zzk4.onrender.com/userData"
       );
       setData(response.data);
+      setDataLength(response.length)
+      console.log(response.length)
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -87,10 +116,13 @@ const AppContextProvider = ({ children }) => {
     handleEdit,
     handleDelete,
     handleAddUser,
-    currentPage,
-    itemsPerPage,
-    handlePageChange,
     loading,
+    datalength,
+    limit,
+    setLimit,
+    page,
+    setPage,
+    initialData
   };
 
   return (

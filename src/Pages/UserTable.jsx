@@ -2,6 +2,9 @@ import React, { useContext, useState } from "react";
 import Navbar from "../Components/Navbar";
 import {
   Box,
+  Flex,
+  Text,
+  Select,
   Input,
   TableContainer,
   Table,
@@ -22,6 +25,7 @@ import {
 } from "@chakra-ui/react";
 
 import { AppContext } from "../Context/AppContext";
+import Pagination from "../Components/Pagination";
 
 const UserTable = () => {
   const [editingUserId, setEditingUserId] = useState(null);
@@ -30,8 +34,15 @@ const UserTable = () => {
   const [newUserName, setNewUserName] = useState("");
   const [newUserEmail, setNewUserEmail] = useState("");
 
-  const { data, handleEdit, handleDelete, handleAddUser, loading } =
-    useContext(AppContext);
+  const {
+    data,
+    handleEdit,
+    handleDelete,
+    handleAddUser,
+    loading,
+    limit,
+    setLimit,
+  } = useContext(AppContext);
   const {
     isOpen: editModalIsOpen,
     onOpen: openEditModal,
@@ -79,7 +90,7 @@ const UserTable = () => {
         mt={"20px"}
         w={"90%"}
       >
-        <Box display={"flex"} justifyContent={"flex-end"} padding={"50px"}>
+        <Box display={"flex"} justifyContent={"flex-end"} padding={"30px"}>
           <Button onClick={openAddUserModal} colorScheme="red">
             ADD
           </Button>
@@ -132,8 +143,27 @@ const UserTable = () => {
             </Tbody>
           </Table>
         </TableContainer>
+        <Box>
+          <Flex align={"center"} justify={"center"} mt={"30px"} mr={"35px"}>
+            <Text textAlign={"center"}>Rows per page :</Text>
+            <Select
+              w={"70px"}
+              variant="flushed"
+              textAlign={"center"}
+              value={limit}
+              onChange={(e) => {
+                setLimit(e.target.value);
+                console.log(e.target.value);
+              }}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+            </Select>
+            <Pagination />
+          </Flex>
+        </Box>
       </Box>
-      <Box></Box>
 
       {/* Modal for Editing */}
       <Modal isOpen={editModalIsOpen} onClose={closeEditModal}>

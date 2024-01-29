@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Box,
   FormControl,
@@ -16,7 +17,6 @@ const Login = () => {
   const handleClick = () => setShow(!show);
 
   const [form, setForm] = useState({ username: "", password: "" });
-
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,17 +25,28 @@ const Login = () => {
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
   };
 
-  const handleSubmit = () => {
-    if (form.username !== "Ijona" || form.password !== "Ijona") {
-      alert("Incorrect username or password");
-      return;
-    }
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "https://json-server-zzk4.onrender.com/login",
+        form
+      );
 
-    // Proceed with the login logic
-    let data = JSON.parse(localStorage.getItem("userData")) || [];
-    data.push(form);
-    localStorage.setItem("userData", JSON.stringify(data));
-    navigate("/home");
+      const { username, password } = response.data;
+
+      if (username === "Ijona" && password === "Ijona") {
+        // Proceed with the login logic
+        let data = JSON.parse(localStorage.getItem("userData")) || [];
+        data.push(form);
+        localStorage.setItem("userData", JSON.stringify(data));
+        navigate("/home");
+      } else {
+        alert("Incorrect username or password");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("An error occurred while processing your request");
+    }
   };
 
   return (
