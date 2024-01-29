@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Box, Button, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex } from "@chakra-ui/react";
 import { AppContext } from "../Context/AppContext";
 
 const Pagination = () => {
@@ -7,7 +7,6 @@ const Pagination = () => {
 
   const totalPages = Math.ceil(datalength / limit);
   const startItem = (page - 1) * limit + 1;
-  const endItem = Math.min(startItem + limit - 1, datalength);
 
   const handlePageAdd = () => {
     setPage((page) => page + 1);
