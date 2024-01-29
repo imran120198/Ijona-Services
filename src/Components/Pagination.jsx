@@ -6,7 +6,6 @@ const Pagination = () => {
   const { datalength, page, limit, setPage } = useContext(AppContext);
 
   const totalPages = Math.ceil(datalength / limit);
-  const startItem = (page - 1) * limit + 1;
 
   const handlePageAdd = () => {
     setPage((page) => page + 1);
